@@ -1,26 +1,32 @@
 ---
-title: "Untitled"
+title: "Floods and Tornados: Top Culprits for Human and Economic Perils"
 author: "Chi Lam"
 date: "September 23, 2015"
 output: pdf_document
 ---
-## Synopsis 
+## Synopsis
+Analyzing the NOAA Storm Database, we conclude that in the Unied States, torandos, excessive heat, and flash floods cause the most deaths; torandos, thunderstorm winds, and floods cause the most injuries; and floods, hurricane typhoons, and torandos cause the most economic losses.  Note that floods and tornados are the top causes for all 3 catergories.  
 
-## Libraries needed
+
+## Data Processing
+This study uses the R software package to analyze the NOAA Storm Database.  The code blocks below documents all the R code generating the statistics and results.
+
+### Libraries needed
 ```{r libs, message = FALSE, results=FALSE}
 library(dplyr)
 library(ggplot2)
 ```
 
-## Data Processing
 ### Loading data
 ```{r loadNOrg, cache=TRUE, message = FALSE}
 
 #loading data
 stormStat <- read.csv("repdata-data-StormData.csv.bz2")
 ```
+Note that this process takes many minutes to complete, since the NOAA Storm Database is quite large.
 
 ### Statistics Generation
+The following code block parses the costs of property damage, and crop damage, and combines them into the economic damage.  The sum of fatalities, injuries, and economic damage, and the frequency are also generated for each event.
 ```{r dataProc}
 #interpret the prop and crop damage exponents
 ltrexp <- c("", " ", "-", "?", "+", "0", "1", "2", "3", "4", 
@@ -44,6 +50,7 @@ stormStatSumByFatal <- stormStatSum[order(-stormStatSum$fatalities), ]
 
 ## Results
 ### Fatalities
+The code below generates a bar chart of the top 10 events that cause the most fatalities in the United States.  Note that torandos, excessive heat, and flash floods cause the most deaths in the United States.
 ```{r fatalStats}
 stormStatSumByFatalIdx <- order(-stormStatSum$fatalities)
 top10fatal <- head(stormStatSum[stormStatSumByFatalIdx, c("EVTYPE", "frequency", "fatalities")], n=10)
@@ -53,6 +60,8 @@ qplot(y=fatalities,x=EVTYPE, fill=frequency, data=top10fatal, geom="bar", stat="
 ```
 
 ### Injuries
+The code below generates a bar chart of the top 10 events that cause the most injuries in the United States.  Note that torandos, thunderstorm winds, and floods cause the most injuries in the United States.
+
 ```{r injuryStats}
 stormStatSumByInjurIdx <- order(-stormStatSum$injuries)
 top10injur <- head(stormStatSum[stormStatSumByInjurIdx, c("EVTYPE", "frequency", "injuries")], n=10)
@@ -62,6 +71,8 @@ qplot(y=injuries, x=EVTYPE, fill=frequency, data=top10injur, geom="bar", stat="i
 ```
 
 ### Economic Losses
+The code below generates a bar chart of the top 10 events that cause the most economic losses in the United States.  Note that floods, hurricane typhoons, and torandos cause the most economic losses in the United States.
+
 ```{r econStats}
 stormStatSumByEconIdx <- order(-stormStatSum$econDmg)
 top10loss <- head(stormStatSum[stormStatSumByEconIdx, c("EVTYPE", "frequency", "econDmg" )], n=10)
@@ -71,3 +82,4 @@ qplot(y=econDmg, x=EVTYPE, fill=frequency, data=top10loss, geom="bar", stat="ide
 ```
 
 ##Conclusion
+ Analyzing the NOAA Storm Database, we conclude that in the Unied States, torandos, excessive heat, and flash floods cause the most deaths; torandos, thunderstorm winds, and floods cause the most injuries; and floods, hurricane typhoons, and torandos cause the most economic losses.  Note that floods and tornados are the top causes for all 3 catergories.  Policy makers should focus most of their efforts in mitigating the damages caused by floods and tornados.
