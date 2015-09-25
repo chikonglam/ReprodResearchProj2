@@ -2,12 +2,14 @@
 title: "Untitled"
 author: "Chi Lam"
 date: "September 23, 2015"
-output: html_document
+output: pdf_document
 ---
-##libraries needed
+## Synopsis 
+
+## Libraries needed
 ```{r libs, message = FALSE, results=FALSE}
 library(dplyr)
-library(knitr)
+library(ggplot2)
 ```
 
 ## Data Processing
@@ -45,19 +47,27 @@ stormStatSumByFatal <- stormStatSum[order(-stormStatSum$fatalities), ]
 ```{r fatalStats}
 stormStatSumByFatalIdx <- order(-stormStatSum$fatalities)
 top10fatal <- head(stormStatSum[stormStatSumByFatalIdx, c("EVTYPE", "frequency", "fatalities")], n=10)
-kable(top10fatal)
+top10fatal$EVTYPE <- factor(top10fatal$EVTYPE, levels = top10fatal$EVTYPE)
+qplot(y=fatalities,x=EVTYPE, fill=frequency, data=top10fatal, geom="bar", stat="identity") + coord_flip() + 
+    labs(title = "Top 10 Events by Fatalities", y="Fatalities", x="Event Type")
 ```
 
 ### Injuries
 ```{r injuryStats}
 stormStatSumByInjurIdx <- order(-stormStatSum$injuries)
 top10injur <- head(stormStatSum[stormStatSumByInjurIdx, c("EVTYPE", "frequency", "injuries")], n=10)
-kable(top10injur)
+top10injur$EVTYPE <- factor(top10injur$EVTYPE, levels = top10injur$EVTYPE)
+qplot(y=injuries, x=EVTYPE, fill=frequency, data=top10injur, geom="bar", stat="identity") +     coord_flip() + 
+    labs(title = "Top 10 Events by Injuries", y="Injuries", x="Event Type")
 ```
 
 ### Economic Losses
 ```{r econStats}
 stormStatSumByEconIdx <- order(-stormStatSum$econDmg)
 top10loss <- head(stormStatSum[stormStatSumByEconIdx, c("EVTYPE", "frequency", "econDmg" )], n=10)
-kable(top10loss)
+top10loss$EVTYPE <- factor(top10loss$EVTYPE, levels = top10loss$EVTYPE)
+qplot(y=econDmg, x=EVTYPE, fill=frequency, data=top10loss, geom="bar", stat="identity") +     coord_flip() + 
+    labs(title = "Top 10 Events by Economic Loss", y="Economic Loss(USD)", x="Event Type")
 ```
+
+##Conclusion
