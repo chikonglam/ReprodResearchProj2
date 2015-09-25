@@ -31,8 +31,10 @@ ltrexp <- c("", " ", "-", "?", "+", "0", "1", "2", "3", "4",
 	"5", "6", "7", "8", "B", "h", "H", "k", "K", "m", "M")
 num10pwr <- c(0, 0, 0, 0, 0, 0, 1, 2, 3, 4,
 	5, 6, 7, 8, 9, 2, 2, 3, 3, 6, 6)
-stormStat$PROPDMGTTL <- stormStat$PROPDMG * 10^( num10pwr[match(stormStat$PROPDMGEXP, ltrexp)] )
-stormStat$CROPDMGTTL <- stormStat$CROPDMG * 10^( num10pwr[match(stormStat$CROPDMGEXP, ltrexp)] )
+stormStat$PROPDMGTTL <- stormStat$PROPDMG * 10^( 
+    num10pwr[match(stormStat$PROPDMGEXP, ltrexp)] )
+stormStat$CROPDMGTTL <- stormStat$CROPDMG * 10^( 
+    num10pwr[match(stormStat$CROPDMGEXP, ltrexp)] )
 
 #combining deaths with injuries, and property with crop damages
 stormStat$econDmg <- stormStat$PROPDMGTTL + stormStat$CROPDMGTTL
@@ -51,9 +53,11 @@ The code below generates a bar chart of the top 10 events that cause the most fa
 
 ```{r fatalStats}
 stormStatSumByFatalIdx <- order(-stormStatSum$fatalities)
-top10fatal <- head(stormStatSum[stormStatSumByFatalIdx, c("EVTYPE", "frequency", "fatalities")], n=10)
+top10fatal <- head(stormStatSum[stormStatSumByFatalIdx, 
+                                c("EVTYPE", "frequency", "fatalities")], n=10)
 top10fatal$EVTYPE <- factor(top10fatal$EVTYPE, levels = top10fatal$EVTYPE)
-qplot(y=fatalities,x=EVTYPE, fill=frequency, data=top10fatal, geom="bar", stat="identity") + coord_flip() + 
+qplot(y=fatalities,x=EVTYPE, fill=frequency, data=top10fatal, geom="bar",
+      stat="identity") + coord_flip() + 
     labs(title = "Top 10 Events by Fatalities", y="Fatalities", x="Event Type")
 ```
 
@@ -62,9 +66,11 @@ The code below generates a bar chart of the top 10 events that cause the most in
 
 ```{r injuryStats}
 stormStatSumByInjurIdx <- order(-stormStatSum$injuries)
-top10injur <- head(stormStatSum[stormStatSumByInjurIdx, c("EVTYPE", "frequency", "injuries")], n=10)
+top10injur <- head(stormStatSum[stormStatSumByInjurIdx, 
+                                c("EVTYPE", "frequency", "injuries")], n=10)
 top10injur$EVTYPE <- factor(top10injur$EVTYPE, levels = top10injur$EVTYPE)
-qplot(y=injuries, x=EVTYPE, fill=frequency, data=top10injur, geom="bar", stat="identity") +     coord_flip() + 
+qplot(y=injuries, x=EVTYPE, fill=frequency, data=top10injur, geom="bar", 
+      stat="identity") + coord_flip() + 
     labs(title = "Top 10 Events by Injuries", y="Injuries", x="Event Type")
 ```
 
@@ -73,10 +79,13 @@ The code below generates a bar chart of the top 10 events that cause the most ec
 
 ```{r econStats}
 stormStatSumByEconIdx <- order(-stormStatSum$econDmg)
-top10loss <- head(stormStatSum[stormStatSumByEconIdx, c("EVTYPE", "frequency", "econDmg" )], n=10)
+top10loss <- head(stormStatSum[stormStatSumByEconIdx, 
+                               c("EVTYPE", "frequency", "econDmg" )], n=10)
 top10loss$EVTYPE <- factor(top10loss$EVTYPE, levels = top10loss$EVTYPE)
-qplot(y=econDmg, x=EVTYPE, fill=frequency, data=top10loss, geom="bar", stat="identity") +     coord_flip() + 
-    labs(title = "Top 10 Events by Economic Loss", y="Economic Loss(USD)", x="Event Type")
+qplot(y=econDmg, x=EVTYPE, fill=frequency, data=top10loss, geom="bar", 
+      stat="identity") + coord_flip() + 
+    labs(title = "Top 10 Events by Economic Loss", y="Economic Loss(USD)", 
+         x="Event Type")
 ```
 
 ##Conclusion
