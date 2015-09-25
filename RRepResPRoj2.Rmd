@@ -4,14 +4,22 @@ author: "Chi Lam"
 date: "September 23, 2015"
 output: html_document
 ---
-## Loading data and organizing data
-```{r loadNOrg, cache=TRUE, message = FALSE}
-#loading libraries
+##libraries needed
+```{r libs, message = FALSE, results=FALSE}
 library(dplyr)
+library(knitr)
+```
+
+## Data Processing
+### Loading data
+```{r loadNOrg, cache=TRUE, message = FALSE}
 
 #loading data
 stormStat <- read.csv("repdata-data-StormData.csv.bz2")
+```
 
+### Statistics Generation
+```{r dataProc}
 #interpret the prop and crop damage exponents
 ltrexp <- c("", " ", "-", "?", "+", "0", "1", "2", "3", "4", 
 	"5", "6", "7", "8", "B", "h", "H", "k", "K", "m", "M")
@@ -30,20 +38,26 @@ stormStatSum <- stormStat %>% group_by(EVTYPE) %>%
               humanHarm=sum(humanHarm), propDmg=sum(PROPDMGTTL), cropDmg=sum(CROPDMGTTL),
               econDmg=sum(econDmg));
 stormStatSumByFatal <- stormStatSum[order(-stormStatSum$fatalities), ]
-
-
 ```
+
+## Results
+### Fatalities
 ```{r fatalStats}
 stormStatSumByFatalIdx <- order(-stormStatSum$fatalities)
 top10fatal <- head(stormStatSum[stormStatSumByFatalIdx, c("EVTYPE", "frequency", "fatalities")], n=10)
+kable(top10fatal)
 ```
 
+### Injuries
 ```{r injuryStats}
 stormStatSumByInjurIdx <- order(-stormStatSum$injuries)
 top10injur <- head(stormStatSum[stormStatSumByInjurIdx, c("EVTYPE", "frequency", "injuries")], n=10)
+kable(top10injur)
 ```
 
+### Economic Losses
 ```{r econStats}
 stormStatSumByEconIdx <- order(-stormStatSum$econDmg)
 top10loss <- head(stormStatSum[stormStatSumByEconIdx, c("EVTYPE", "frequency", "econDmg" )], n=10)
+kable(top10loss)
 ```
